@@ -1,0 +1,71 @@
+# This file is a template, and might need editing before it works on your project.
+# This is a sample GitLab CI/CD configuration file that should run without any modifications.
+# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
+# it uses echo commands to simulate the pipeline execution.
+#
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+#
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
+#
+# You can copy and paste this template into a new `.gitlab-ci.yml` file.
+# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
+#
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+
+image: docker:20.10.21
+services:
+  - docker:20.10.16-dind
+  
+stages:
+  - build
+  - release
+
+# declare the variables used within the CI and eventually docker files
+variables:
+  WORKDIR: "loanProject"
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  LATEST_RELEASE_IMAGE_TAG: $CI_REGISTRY_IMAGE:latest 
+  VERSION_RELEASE_IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+  #-t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_REF_SLUG"
+
+# setup the environment before running the different scripts
+default: #default lets us exclude the before script from the gke-deployment stage
+  before_script:
+    # update an upgrade
+    - apk update
+    - apk upgrade
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    # go into working directory
+    - cd $WORKDIR
+
+# run the build step
+build:
+  # define which runner to use
+  tags:
+    - docker-build
+  stage: build
+  script:
+    #build the docker image
+    - docker build -f Dockerfile .
+
+
+#run the release step
+release:
+  tags:
+    - docker-build
+  stage: release
+
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_REF_SLUG" --push .
+   
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+.\d+.\d+$/
+      when: on_success
+  
