@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+  <head>
+    <!-- Required meta tags -->
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{%static 'assets/plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="{%static 'assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{%static 'assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="{%static 'assets/plugins/jqvmap/jqvmap.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{%static 'assets/dist/css/adminlte.min.css' %}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{%static 'assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="{%static 'assets/plugins/daterangepicker/daterangepicker.css' %}">
+    <!-- summernote -->
+    <link rel="stylesheet" href="{%static 'assets/plugins/summernote/summernote-bs4.min.css' %}">
+
+    <title>AI Loan</title>
+
+    <style>
+      body {
+        background-color: #e9ecef;
+      }
+
+      .nav {
+        background-color: #9616BD;
+      }
+
+      .link {
+        padding-right: 2em;
+        font-size: 1.25em;
+      }
+
+      .nav-link {
+        color: white;
+      }
+
+      .nav-link:hover {
+        color: rgb(200, 200, 200);
+      }
+
+      .box {
+        display: inline-block;
+        width: 50%;
+        float: left;
+        padding: 2em;
+      }
+
+      .home {
+        padding: 2em;
+      }
+
+      .form {
+        background-color: rgb(200, 200, 240);
+        background-color: white;
+        padding: 2em;
+        border-radiums: 1em;
+        text-align: center;
+        width: 25%;
+        margin-left: 15em;
+      }
+
+      .left {
+        width: 55%;
+      }
+
+      form {
+        margin-top: 2em;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-sm nav">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+          <img src="{%static 'assets/dist/img/AILOAN-removebg.png' %}" height="35%" width="35%">
+        </a>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li class="link"><a href="/login" class="nav-link">Login</a></li>
+          <li class="link"><a href="/register" class="nav-link">Sign Up</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="home">
+      <div class="box left">
+        <h1>Welcome to AiLoan</h1>
+        <p>We help you simplify your loan application and eligibility process. Using AILoan, as a bank customer, you can quickly discover if you are eligible for a loan with your bank. As a bank admin, you can quickly check if your applicants are eligible for a loan. With AI, we help you reduce the risks, processing time and provide reliable feedback.</p>
+        <p><b>Are you interested?</b> <a href="/register">Sign up</a> right now!</p>
+      </div>
+
+      <div class="box form">
+        <h1>Already have an account?</h1>
+        <h3>Sign right in!</h3>
+        <span class="mb-0 text-muted">
+          {% if msg %}
+              {{ msg | safe }}
+          {% endif %}
+        </span>
+        <form method="post">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+              {{ form.username }}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+              {{ form.password }}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-8">
+              <div class="forgot-password">
+                  <a href="{% url 'password_reset' %}" style="color: #090303;">Forgot Password?</a>
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-4">
+              <button type="submit" class="btn btn-primary btn-block">Log In</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
