@@ -344,7 +344,6 @@ def chat_assistance(request):
 
 ### Admin functions 
     
-
 def information(request):
     return render(request, 'admin/information.html')
     
