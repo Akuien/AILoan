@@ -18,6 +18,7 @@ from openai import OpenAI
 from allauth.account.views import PasswordResetView as AllauthPasswordResetView
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
+import shap
 
 client = OpenAI(api_key='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')
 
@@ -125,6 +126,15 @@ def create_applicant(request):
             model = load_model(model_path)
             prediction = model.predict([[Age, Income_USD, LoanAmount_USD, CreditScore, MonthsEmployed, LoanTerm, DTIRatio]])
             print("Prediction Result:", prediction[0])
+
+            input_data = np.array([[Age, Income_USD, LoanAmount_USD, CreditScore, MonthsEmployed, LoanTerm, DTIRatio]])
+            explainer = shap.TreeExplainer(model)
+            shap_values = explainer.shap_values(input_data)
+
+            if shap_values and isinstance(shap_values, list):
+                
+                flat_shap_values = flat_shap_values = [item for sublist in shap_values for item in sublist]
+                context['shap_values'] = flat_shap_values
 
             save_to_database(
                 [{

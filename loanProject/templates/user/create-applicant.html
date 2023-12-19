@@ -356,7 +356,47 @@
 {% if application_result %}
   <h2>{{ application_result }}</h2>
 {% endif %}
-          
+{% if shap_values %}
+<div class="card mt-4">
+  <div class="card-header">
+    <h4 class="card-title">
+      Insights into your loan application!
+    </h4>
+  </div>
+  <div class="card-body">
+    <ul>
+      <li><strong>Your Age:</strong> {{ shap_values.0.0|floatformat:5 }}</li>
+      <li><strong>Income:</strong> {{ shap_values.0.1|floatformat:5 }}</li>
+      <li><strong>Loan Amount:</strong> {{ shap_values.0.2|floatformat:5 }}</li>
+      <li><strong>Credit Score:</strong> {{ shap_values.0.3|floatformat:5 }}</li>
+      <li><strong>Months Employed:</strong> {{ shap_values.0.4|floatformat:5 }}</li>
+      <li><strong>Loan Term:</strong> {{ shap_values.0.5|floatformat:5 }}</li>
+      <li><strong>Debt-to-Income Ratio (DTI):</strong> {{ shap_values.0.6|floatformat:5 }}</li>
+    </ul>
+    <p>
+      These insights help you understand how each factor influenced the decision on your loan application.
+      Here are some personalized suggestions based on the analysis:
+    </p>
+    <ul>
+      {% if shap_values.0.3 > 0.05 %}
+        <li>Consider improving your credit score for better loan terms.</li>
+      {% endif %}
+      {% if shap_values.0.6 < -0.1 %}
+        <li>Reducing your debt-to-income ratio may increase your chances of loan approval.</li>
+      {% endif %}
+      {% if shap_values.0.5 > 0.1 %}
+        <li>Opting for a longer loan term may make your monthly payments more manageable.</li>
+      {% endif %}
+      {% if shap_values.0.2 < -0.05 %}
+        <li>Adjusting your requested loan amount could positively impact your application.</li>
+      {% endif %}
+    </ul>
+    <p>
+      If you have any questions or need assistance, feel free to reach out to our support team.
+    </p>
+  </div>
+</div>
+{% endif %}   
         </div>
         <!-- /.card-body -->
       </div>
