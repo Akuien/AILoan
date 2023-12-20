@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="{%static 'assets/plugins/summernote/summernote-bs4.min.css' %}">
   <style>
   .ccform input {
-    width: 30%;
+    width: 50%;
   }
   .ccform .input-group-prepend .input-group-text {
     width: 60px; /* Set the desired width for the icons */
@@ -170,17 +170,17 @@
   {% csrf_token %}
 
   <div class="form-group">
-    <label for="id_Age">What is your current age?</label>
+    <label for="{{ form.Age.id_for_label }}">Age</label>
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
       </div>
-      {{ form.Age }}
+    {{ form.Age }}
     </div>
   </div>
 
   <div class="form-group">
-    <label for="id_Income">How much is your income per year?</label>
+    <label for="{{ form.Income.id_for_label }}">Annual Salary</label>
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text"><i class="fas fa-pound-sign"></i></span>
@@ -190,7 +190,7 @@
   </div>
 
   <div class="form-group">
-    <label for="id_LoanAmount">How much loan?</label>
+    <label for="{{ form.LoanAmount.id_for_label }}">Loan Amount</label>
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text"><i class="fas fa-pound-sign"></i></span>
@@ -200,7 +200,7 @@
   </div>
 
   <div class="form-group">
-    <label for="id_CreditScore">what is your Credit Score
+    <label for="{{ form.CreditScore.id_for_label }}">Credit Score
       <a href="#" data-toggle="modal" data-target="#creditScoreModal">
         <i class="fas fa-question-circle ml-1"></i>
     </a>
@@ -214,7 +214,7 @@
   </div>
 
   <div class="form-group">
-    <label for="id_MonthsEmployed">How long is your working experience (months)?</label>
+    <label for="{{ form.MonthsEmployed.id_for_label }}">Work Experience</label>
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text"><i class="fas fa-suitcase"></i></span>
@@ -224,7 +224,7 @@
   </div>
 
   <div class="form-group">
-    <label for="id_LoanTerm">LoanTerm
+    <label for="{{ form.LoanTerm.id_for_label }}">Loan Term
       <a href="#" data-toggle="modal" data-target="#loanTermModal">
         <i class="fas fa-question-circle ml-1"></i>
     </a>
@@ -238,7 +238,7 @@
   </div>
 
   <div class="form-group">
-    <label for="id_DTIRatio">DTIRatio?
+    <label for="{{ form.DTIRatio.id_for_label }}">DTIRatio
       <a href="#" data-toggle="modal" data-target="#dtiRatioModal">
         <i class="fas fa-question-circle ml-1"></i>
     </a>

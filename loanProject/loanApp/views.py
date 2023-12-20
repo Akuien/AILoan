@@ -164,6 +164,13 @@ def create_applicant(request):
             context['application_result'] = "Congratulations, you qualify for a loan!" if prediction[0] == 0 else "Sorry, your application has been rejected."
     else:
         form = LoanForm()
+        form.fields['Age'].widget.attrs['placeholder'] = 'Enter your age'
+        form.fields['Income'].widget.attrs['placeholder'] = 'Enter your annual salary in SEK'
+        form.fields['LoanAmount'].widget.attrs['placeholder'] = 'Enter your desired loan amount in SEK'
+        form.fields['CreditScore'].widget.attrs['placeholder'] = 'Enter your credit score'
+        form.fields['MonthsEmployed'].widget.attrs['placeholder'] = 'Enter your total months of employment'
+        form.fields['LoanTerm'].widget.attrs['placeholder'] = 'Enter the months to repay'
+        form.fields['DTIRatio'].widget.attrs['placeholder'] = 'Enter your debt to income ratio'
     context['form'] = form
     return render(request, 'user/create-applicant.html', context)
 
