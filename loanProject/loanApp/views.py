@@ -501,7 +501,8 @@ def reports(request):
     approval_rate_formatted = "{:.2f}".format(approval_rate)
     rejection_rate_formatted = "{:.2f}".format(rejection_rate)
     data = LoanApplicant.objects.values_list('Default', flat=True)
-    #data2 = LoanApplicant.objects.values('Default', 'Income')
+    data2 = LoanApplicant.objects.values('Default', 'Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio')
+    
 
     fig = px.histogram(x=data, nbins=10, title='Distribution of approval rates',
                        labels={'x': 'Loan Status', 'y': 'Frequency'})
@@ -518,11 +519,17 @@ def reports(request):
     # Convert the Plotly figure to HTML
     plotDonut_html = fig.to_html(full_html=False)
 
-    """ df = pd.DataFrame.from_records(data2)
-    # Create a scatter plot using Plotly Express
-    fig = px.scatter(df, x='Income', y='Default', color='Default', title='Relationship between Default and Income')
-    # Convert the Plotly figure to HTML
-    plotScatter_html = fig.to_html(full_html=False)"""
+    df = pd.DataFrame.from_records(data2)
+
+    feature_statistics = {}
+    features = ['Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio']
+
+    for feature in features:
+        statistics = df.groupby('Default')[feature].agg(['mean', 'median', 'min', 'max', 'std'])
+        feature_statistics[feature] = statistics.to_html()
+
+    
+  
 
     context = {
         'total_applications': total_applications,
@@ -532,6 +539,8 @@ def reports(request):
         'rejection_rate': rejection_rate_formatted,
         'plot_html': plot_html,
         'plotDonut_html': plotDonut_html,
+        'feature_statistics': feature_statistics,
+        #'graph_html': graph_html,
         #'plotScatter_html': plotScatter_html,
     }
 

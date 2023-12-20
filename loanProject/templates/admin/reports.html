@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin AiLoan | Dashboard</title>
-  </style>
+ 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -28,6 +28,37 @@
   <!-- summernote -->
   <link rel="stylesheet" href="{%static 'assets/plugins/summernote/summernote-bs4.min.css' %}">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <style>
+    .row {
+      text-align: center;
+    }
+    .card {
+      border: none;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      box-shadow: 0 4px 90px 0 rgba(119, 4, 119, 0.2);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    h2 {
+      color: #333333;
+    }
+  </style>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -131,20 +162,48 @@
           <div class="card-header">
             <h3 class="card-title">Loan Application Statistics</h3>
           </div> <!-- /.card-body -->
-          <div class="card-body">
-            <div>
+         
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="card">
               <p>Total Number of Applications: {{ total_applications }}</p>
-              <p>Approval Rate: {{ approval_rate }}%</p>
-              <p>Rejection Rate: {{ rejection_rate }}%</p>
               <p>Total Approved Applications: {{ approved_applications }}</p>
               <p>Total Rejected Applications: {{ rejected_applications }}</p>
+              <p>Approval Rate: {{ approval_rate }}%</p>
+              <p>Rejection Rate: {{ rejection_rate }}%</p>
             </div>
-      {{ plot_html|safe }}    
-      {{ plotDonut_html|safe }}
-     <!-- /.{{ plotScatter_html|safe }} --> 
-     
+            </div>
 
-          </div><!-- /.card-body -->
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                {{ plotDonut_html|safe }}
+              </div>
+            </div>
+
+          </div>
+
+         
+
+            <div id="loan-status-statistics"></div>
+            <h2>Loan Status Statistics</h2>
+            <p>Select the feature </p>
+
+    <!-- Radio buttons for feature selection -->
+    <form>
+      {% for feature, statistics_html in feature_statistics.items %}
+        <input type="radio" name="feature" value="{{ feature }}" onclick="showTable('{{ feature }}')"> {{ feature }}
+      {% endfor %}
+    </form>
+
+    <!-- Tables for each feature -->
+    {% for feature, statistics_html in feature_statistics.items %}
+      <div id="{{ feature }}Table" style="display:none;">
+        {{ statistics_html|safe }}
+      </div>
+    {% endfor %}
+
+
+         
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -188,6 +247,20 @@
 <script src="{%static 'assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>
 <!-- AdminLTE App -->
 <script src="{%static 'assets/dist/js/adminlte.js' %}"></script>
+
+<script>
+  function showTable(feature) {
+    // Hide all tables
+    var tables = document.querySelectorAll('[id$="Table"]');
+    tables.forEach(table => {
+      table.style.display = 'none';
+    });
+
+    // Show the selected table
+    var selectedTable = document.getElementById(feature + 'Table');
+    selectedTable.style.display = 'block';
+  }
+</script>
 
 </body>
 </html>
