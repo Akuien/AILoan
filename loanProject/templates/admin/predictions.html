@@ -41,13 +41,14 @@
       /* Add some margin for spacing */
       border-collapse: collapse;
     }
-  
+
     th,
     td {
       padding: 5px;
       /* Adjust the padding as needed */
       text-align: left;
     }
+
     .switch {
       position: relative;
       display: inline-block;
@@ -85,15 +86,15 @@
       transition: .4s;
     }
 
-    input:checked + .slider {
+    input:checked+.slider {
       background-color: #2196F3;
     }
 
-    input:focus + .slider {
+    input:focus+.slider {
       box-shadow: 0 0 1px #2196F3;
     }
 
-    input:checked + .slider:before {
+    input:checked+.slider:before {
       -webkit-transform: translateX(26px);
       -ms-transform: translateX(26px);
       transform: translateX(26px);
@@ -117,8 +118,6 @@
       display: inline-block;
       margin-left: 10px;
     }
-
-
   </style>
 </head>
 
@@ -241,7 +240,7 @@
                   <label for="csv_file">Upload CSV File:</label>
                   <input type="file" class="form-control" name="csv_file" accept=".csv" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Upload and Predict</button> 
+                <button type="submit" class="btn btn-primary">Upload and Predict</button>
               </form>
 
               <label class="switch">
@@ -249,80 +248,80 @@
                 <span class="slider"></span>
               </label>
               <p id="viewIndicator" style="margin-top: 10px; color: #6c757d;"></p>
-              
-            </section>
-              <section class="content">
-              <div id="chartTableContainer">
-              <div id="pie-chart-container" style="height: 300px;">
-                {{ predictions_data.plot_div|safe }}
-                
+
+      </section>
+      <section class="content">
+        <div id="chartTableContainer">
+          <div id="pie-chart-container" style="height: 300px;">
+            {{ predictions_data.plot_div|safe }}
+
+          </div>
+        </div>
+      </section>
+
+      <section class="content">
+        <div id="table-container" style="overflow: auto; max-height: 300px; display: none;">
+
+          <table class="table table-bordered">
+            <thead style="background-color: rgb(214, 142, 219);">
+              <tr>
+                {% for header in predictions_data.headers %}
+                <th>{{ header }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for record, prediction in predictions_data.records %}
+              <tr>
+                {% for key, value in record.items %}
+                <td>{{ value }}</td>
+                {% endfor %}
+                <td>
+                  {% if prediction == 1 %}
+                  Approved
+                  {% else %}
+                  Rejected
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal" id="errorModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h4 class="modal-title">Error</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p id="error-message"></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
               </div>
             </div>
-          </section>
-          
-          <section class="content">
-            <div id="table-container" style="overflow: auto; max-height: 300px; display: none;">
-             
-                <table class="table table-bordered">
-                  <thead style="background-color: rgb(214, 142, 219);">
-                    <tr>
-                      {% for header in predictions_data.headers %}
-                      <th>{{ header }}</th>
-                      {% endfor %}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for record, prediction in predictions_data.records %}
-                    <tr>
-                      {% for key, value in record.items %}
-                      <td>{{ value }}</td>
-                      {% endfor %}
-                      <td>
-                        {% if prediction == 1 %}
-                        Approved
-                        {% else %}
-                        Rejected
-                        {% endif %}
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            
-              <div class="modal" id="errorModal">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-            
-                    <div class="modal-header">
-                      <h4 class="modal-title">Error</h4>
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                      <p id="error-message"></p>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-         
-
-            </div><!-- /.card-body -->
           </div>
-        </div><!-- /.container-fluid -->
-    
-      <!-- /.content -->
+        </div>
+      </section>
 
-      <!-- /.content -->
-    </div>
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-      <!-- Control sidebar content goes here -->
-    </aside>
+    </div><!-- /.card-body -->
+  </div>
+  </div><!-- /.container-fluid -->
+
+  <!-- /.content -->
+
+  <!-- /.content -->
+  </div>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
   </div>
 
   <!-- jQuery -->
@@ -358,26 +357,26 @@
 
   <script>
     $("#toggleSwitch").change(function () {
-        var isChecked = this.checked;
-        $("#viewIndicator").text("Viewing: " + (isChecked ? "Table" : "Pie Chart"));
+      var isChecked = this.checked;
+      $("#viewIndicator").text("Viewing: " + (isChecked ? "Table" : "Pie Chart"));
 
-        // Toggle visibility of the chart and table containers based on the checkbox state
-        $("#pie-chart-container").css("display", isChecked ? "none" : "block");
-        $("#table-container").css("display", isChecked ? "block" : "none");
+      // Toggle visibility of the chart and table containers based on the checkbox state
+      $("#pie-chart-container").css("display", isChecked ? "none" : "block");
+      $("#table-container").css("display", isChecked ? "block" : "none");
     });
 
     // Set initial state
     $("#viewIndicator").text("Viewing: Pie Chart");
   </script>
 
-<script>
-  $(document).ready(function () {
-    {% if error_message %}
+  <script>
+    $(document).ready(function () {
+      {% if error_message %}
       $('#error-message').text('{{ error_message|escapejs }}');
       $('#errorModal').modal('show');
-    {% endif %}
-  });
-</script>
+      {% endif %}
+    });
+  </script>
 
 </body>
 
