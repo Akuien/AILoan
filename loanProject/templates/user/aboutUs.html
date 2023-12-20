@@ -30,9 +30,28 @@
   <link rel="stylesheet" href="{%static 'assets/plugins/summernote/summernote-bs4.min.css' %}">
   <style>
     body {
-      background-color: #7bbac9;
+      background-color: #babebf;
       margin: 0;
     }
+
+    .row {
+    text-align: center;
+}
+
+.card {
+    border: none;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    box-shadow: 0 4px 90px 0 rgba(119, 4, 119, 0.2);
+}
+.card-title {
+    font-family:  sans-serif;
+    font-weight: bold;
+    color: #113e98; 
+    font-size: 28px;
+    text-shadow: 10px 10px 4px rgba(201, 97, 212, 0.2); 
+}
+    
 
     .container {
       position: relative;
@@ -40,8 +59,8 @@
       flex-flow: column;
       justify-content: center;
       margin: 50px auto 0;
-      width: 650px;
-      max-width: 900px;
+      width: 100%;
+      max-width: 100%;
       height: 400px;
     }
 
@@ -56,14 +75,14 @@
     }
 
     .controls div {
-      padding: 12px 14px;
       cursor: pointer;
       border: 2px solid #83b9ed;
-
       font-size: 16px;
       font-weight: bold;
       margin: 0 5px;
       border-radius: 10px;
+      padding: 8px 10px;
+    font-size: 14px;
     }
 
     .controls div.disabled {
@@ -73,7 +92,7 @@
 
     .slider {
       position: relative;
-      width: 140%;
+      width: 100%;
       height: 100%;
       overflow: hidden;
     }
@@ -82,32 +101,28 @@
       display: flex;
       position: absolute;
       top: 15%;
-      left: 10%;
-      width: 82%;
+      left: 0; 
+      width: 100%;
       height: 70%;
       border: 2px solid #fff;
       align-items: center;
       justify-content: space-between;
       border-radius: 20px;
       opacity: 0;
-      padding: 20px;
+      max-width: 100%;
+      padding: 10px;
       transition: all 0.7s ease-out;
     }
-
     .slide img {
-      max-width: 40%;
-      /* Adjust the width of the image */
-      max-height: 100%;
+      max-width: 100%;
+      max-height: 70%;
       border-radius: 15px;
-      /* Add border-radius for rounded corners if desired */
     }
 
     .slide-content {
       flex-grow: 1;
       margin-left: 20px;
-      /* Adjust the margin between image and text */
     }
-
 
     .slide--active {
       opacity: 1;
@@ -117,7 +132,6 @@
     .prev,
     .next {
       opacity: .3;
-
     }
 
     .prev {
@@ -128,6 +142,45 @@
     .next {
       transform: translate(0, 30%) scale(0.8);
     }
+    .grid-content { 
+            width: 30%; 
+            margin-left: 250px; 
+            height: 70%; 
+            padding: 2px; 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            grid-gap: 20px; 
+        } 
+        .grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grid-item img {
+  width: 100%;
+}
+
+.grid-item p {
+  margin-top: 10px;
+  text-align: center;
+}
+.description p {
+  font-weight: bold;
+  font-size: 24px; 
+  color: #113e98; 
+  font-family: sans-serif; 
+  font-style: italic; 
+  text-align:center
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 20px auto 0; 
+    }
+}
+
+
   </style>
 </head>
 
@@ -227,11 +280,9 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
+          
               <img src="{%static 'assets/dist/img/AILOAN-removebg.png' %}">
-            </div>
-          </div>
+           
         </div><!-- /.container-fluid -->
       </section>
 
@@ -239,10 +290,11 @@
       <section class="content">
         <div class="card">
           <div class="card-header">
-            <h4 class="card-title">
-              AILoan: Empowering your financial future with AI
+            <h4>
+              Empowering your financial future with A.I.
             </h4>
           </div>
+        
           <!-- /.card-header -->
           <div class="card-body">
             <p> AILoan, founded in 2023, is a purely online lending platform that combines technology and A.I.solutions.
@@ -256,95 +308,125 @@
 
             <div class="row">
               <div class="col-md-6 mb-4">
-                <div class="card" style="width: 18rem;">
-                  <img class="card-img-top img-fluid" src="{%static 'images/management.png' %}" alt="Card image cap">
-                  <div class="card-body">
+                <div class="card">
                     <h5 class="card-title">Data Risk Managament</h5>
+                    <img class="card-img-top img-fluid mx-auto"style="max-width: 25%;" src="{%static 'images/management.png' %}" alt="Card image cap">
                     <p class="card-text">Utilizing cutting-edge technology for real-time analysis of extensive data,
                       AILoan enables the automatic assessment of risk levels.
                       This breakthrough allows us to provide instant online quotes, striking the ideal equilibrium
                       between robust risk management and swift approval processes.</p>
-
-                  </div>
                 </div>
               </div>
               <div class="col-md-6 mb-4">
-                <div class="card" style="width: 18rem;">
-                  <img class="card-img-top img-fluid" src="{%static 'images/cyber-security.png' %}"
-                    alt="Card image cap">
-                  <div class="card-body">
+                <div class="card">
                     <h5 class="card-title">Safe CyberSecurity</h5>
+                    <img class="card-img-top img-fluid mx-auto"style="max-width: 25%;"  src="{%static 'images/cyber-security.png' %}"
+                    alt="Card image cap">
                     <p class="card-text">In recognizing the undeniable significance of cybersecurity, AIloan employs a
                       comprehensive approach to system security and monitoring.
                       This includes stringent identity authentication procedures and privacy policies, all designed to
                       ensure the utmost protection of your privacy.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="description">
+              <p>AILoan offers a wide range of loan products</p>
+            </div>
+            <div class="grid-content">
+              <div class="grid-item">
+                <img src="{%static 'images/loan.png' %}" style="width: 70%;">
+                <p>Personal Loan</p>
+              </div>
+              <div class="grid-item">
+                <img src="{%static 'images/home-loan.png' %}" style="width: 100%;">
+                <p>Home Loan</p>
+              </div>
+              <div class="grid-item">
+                <img src="{%static 'images/car-loan.png' %}" style="width: 120%;">
+                <p>Car Loan</p>
+              </div>
+              <div class="grid-item">
+                <img src="{%static 'images/vacation.png' %}" style="width: 100%;">
+                <p>Travel Loan</p>
+              </div>
+            </div>
+
+            <div class="container">
+              <div class="description">
+                <p>Our mission and Values</p>
+              </div>
+              
+              <div class="slider">
+                <div class="slide slide--active" data-slide='1' style="background-color: rgb(226, 192, 231)">
+                  <img src="{%static 'images/accounting.png' %}" alt="Image 1">
+                  <div class="slide-content">
+                    <dt>Convenience</dt>
+                    <p>AILoan is solely online, no branches, low cost and high efficient operatng model which allows you
+                      to enjoy the full
+                      benefit of a simplified and expeditious loan application process and a lower intrest rate
+                    </p>
+                  </div>
+                </div>
+                <div class="slide" data-slide='2' style="background-color: rgb(171, 194, 237)">
+                  <img src="{%static 'images/data.png' %}" alt="Image 1">
+                  <div class="slide-content">
+                    <dt>Fair predictions</dt>
+                    <p>We use more than 200 000 thousand sets of data and background information of diverse applicants
+                       to calculate a fair and bias free result in seconds.
+                    </p>
+                  </div>
+                </div>
+                <div class="slide" data-slide='3' style="background-color: rgb(226, 192, 231)">
+                  <img src="{%static 'images/online.png' %}" alt="Image 1">
+                  <div class="slide-content">
+                    <dt>Customer Centric Approach</dt>
+                    <p>We prioritize your experience. Our user-friendly platform is designed with you in mind, providing a
+                      humanized,
+                      tailor-made, and simplified loan application process. Your convenience and satisfaction are at the
+                      core of everything we do.
+                    </p>
+                  </div>
+                </div>
+                <div class="slide" data-slide='4' style="background-color: rgb(171, 194, 237)">
+                  <img src="{%static 'images/analytics.png' %}" alt="Image 1">
+                  <div class="slide-content">
+                    <dt>Leading the Way in Technological Innovation</dt>
+                    <p>At the heart of AIloan is our advanced AI loan prediction system. By harnessing the capabilities of
+                      artificial intelligence and
+                      big data analytics, we've transformed the lending landscape. Our technology ensures real-time
+                      analysis of extensive data, allowing
+                      for automatic risk assessment and instant online quotes. The result? A harmonious blend of robust
+                      risk management and swift approval processes.
+                    </p>
+                  </div>
+                </div>
+                <div class="slide" data-slide='5' style="background-color: rgb(226, 192, 231)">
+                  <img src="{%static 'images/chatbot.png' %}" alt="Image 1">
+                  <div class="slide-content">
+                    <dt>A.I Chatbot</dt>
+                    <p>Want to know more about your loan quotation? How to calculate you DIT ratio? 
+                      Applying online is easier than you think. A.I. stands by 24/7, answering questions anytime. A.I.
+                      keeps learning and improving your financial journey, so that you can complete your application easier.
+                    </p>
                   </div>
                 </div>
               </div>
+              <div class="controls">
+                <div id="back" class="control-button" onclick="prevSlide()">
+                  <img src="{%static 'images/caret-up.png' %}" alt="Back">
+                </div>
+                <div id="forward" class="control-button" onclick="nextSlide()">
+                  <img src="{%static 'images/caret-down.png' %}" alt="Forward">
+                </div>
+              </div>
             </div>
+
           </div>
-          <div class="container">
-            <h1>Our Mission and Values</h1>
-            <div class="slider">
-              <div class="slide slide--active" data-slide='1' style="background-color: rgb(226, 192, 231)">
-                <img src="{%static 'images/accounting.png' %}" alt="Image 1">
-                <div class="slide-content">
-                  <dt>Description</dt>
-                  <p>AILoan is solely online, no branches, low cost and high efficient operatng model which allows you
-                    to enjoy the full
-                    benefit of a simplified and expeditious loan application process and a lower intrest rate
-                  </p>
-                </div>
-              </div>
-              <div class="slide" data-slide='2' style="background-color: rgb(171, 194, 237)">
-                <img src="{%static 'images/online.png' %}" alt="Image 1">
-                <div class="slide-content">
-                  <dt>Customer-Centric Approach</dt>
-                  <p>We prioritize your experience. Our user-friendly platform is designed with you in mind, providing a
-                    humanized,
-                    tailor-made, and simplified loan application process. Your convenience and satisfaction are at the
-                    core of everything we do.
-                  </p>
-                </div>
-              </div>
-              <div class="slide" data-slide='3' style="background-color: rgb(226, 192, 231)">
-                <img src="{%static 'images/analytics.png' %}" alt="Image 1">
-                <div class="slide-content">
-                  <dt>Leading the Way in Technological Innovation</dt>
-                  <p>At the heart of AIloan is our advanced AI loan prediction system. By harnessing the capabilities of
-                    artificial intelligence and
-                    big data analytics, we've transformed the lending landscape. Our technology ensures real-time
-                    analysis of extensive data, allowing
-                    for automatic risk assessment and instant online quotes. The result? A harmonious blend of robust
-                    risk management and swift approval processes.
-                  </p>
-                </div>
-              </div>
-              <div class="slide" data-slide='4' style="background-color: rgb(171, 194, 237)">
-                <img src="{%static 'images/chatbot.png' %}" alt="Image 1">
-                <div class="slide-content">
-                  <dt>Leading the Way in Technological Innovation</dt>
-                  <p>At the heart of AIloan is our advanced AI loan prediction system. By harnessing the capabilities of
-                    artificial intelligence and
-                    big data analytics, we've transformed the lending landscape. Our technology ensures real-time
-                    analysis of extensive data, allowing
-                    for automatic risk assessment and instant online quotes. The result? A harmonious blend of robust
-                    risk management and swift approval processes.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="controls">
-              <div id="back" class="control-button" onclick="prevSlide()">
-                <img src="{%static 'images/caret-up.png' %}" alt="Back">
-              </div>
-              <div id="forward" class="control-button" onclick="nextSlide()">
-                <img src="{%static 'images/caret-down.png' %}" alt="Forward">
-              </div>
-            </div>
-          </div>
+         
         </div>
-    </div>
+      </div>
+
     <!-- /.card -->
   </div>
 
