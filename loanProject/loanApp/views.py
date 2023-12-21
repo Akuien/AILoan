@@ -500,36 +500,28 @@ def reports(request):
 
     approval_rate_formatted = "{:.2f}".format(approval_rate)
     rejection_rate_formatted = "{:.2f}".format(rejection_rate)
-    data = LoanApplicant.objects.values_list('Default', flat=True)
-    data2 = LoanApplicant.objects.values('Default', 'Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio')
     
-
-    fig = px.histogram(x=data, nbins=10, title='Distribution of approval rates',
-                       labels={'x': 'Loan Status', 'y': 'Frequency'})
-
-    fig.update_layout(xaxis=dict(tickvals=[0, 1]))
-    fig.update_layout(height=300, width=400) 
-    plot_html = fig.to_html(full_html=False)
-
-    # Create a pie chart (donut chart) using Plotly
+    data = LoanApplicant.objects.values('Default', 'Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio')
+    
     labels = ['Approved', 'Rejected']
     values = [approval_rate_formatted, rejection_rate_formatted]
-
     fig = px.pie(values=values, names=labels, hole=0.3, title='Approval and Rejection Rates')
-    # Convert the Plotly figure to HTML
     plotDonut_html = fig.to_html(full_html=False)
 
-    df = pd.DataFrame.from_records(data2)
+    df = pd.DataFrame.from_records(data)
+    df['Income'] /= 10
+    df['LoanAmount'] /= 10
 
     feature_statistics = {}
     features = ['Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio']
 
     for feature in features:
         statistics = df.groupby('Default')[feature].agg(['mean', 'median', 'min', 'max', 'std'])
-        feature_statistics[feature] = statistics.to_html()
+        if feature in ['Income', 'LoanAmount']:
+         statistics = statistics.round(2)
+         statistics = statistics.astype(str) + 'kr'
 
-    
-  
+        feature_statistics[feature] = statistics.to_html()
 
     context = {
         'total_applications': total_applications,
@@ -537,11 +529,8 @@ def reports(request):
         'rejected_applications': rejected_applications,
         'approval_rate': approval_rate_formatted,
         'rejection_rate': rejection_rate_formatted,
-        'plot_html': plot_html,
         'plotDonut_html': plotDonut_html,
         'feature_statistics': feature_statistics,
-        #'graph_html': graph_html,
-        #'plotScatter_html': plotScatter_html,
     }
 
     return render(request, 'admin/reports.html', context)
