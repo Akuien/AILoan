@@ -200,6 +200,7 @@
                     {% else %}
                         <h1>Model Evaluation Results</h1>
                         <p>Accuracy: {{ accuracy }}</p>
+                        {{ learning_curve|safe }}
                 
                         <h2>Confusion Matrix:</h2>
                         <table border="1">
