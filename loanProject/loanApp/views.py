@@ -509,12 +509,18 @@ def reports(request):
     plotDonut_html = fig.to_html(full_html=False)
 
     df = pd.DataFrame.from_records(data)
+    df['Income'] /= 10
+    df['LoanAmount'] /= 10
 
     feature_statistics = {}
     features = ['Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio']
 
     for feature in features:
         statistics = df.groupby('Default')[feature].agg(['mean', 'median', 'min', 'max', 'std'])
+        if feature in ['Income', 'LoanAmount']:
+         statistics = statistics.round(2)
+         statistics = statistics.astype(str) + 'kr'
+
         feature_statistics[feature] = statistics.to_html()
 
     context = {
