@@ -45,18 +45,31 @@
     }
 
     th, td {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
+      border: 2px solid #edebee;
+      text-align: center;
+      padding: 10px;
     }
 
     th {
-      background-color: #f2f2f2;
+      background-color: #c6cff2;
     }
 
     h2 {
       color: #333333;
     }
+    .radio-container {
+    display: flex;
+    justify-content:space-evenly;
+  }
+
+  .radio-column {
+    flex: 0 1 48%; 
+    margin-right: 6%;
+  }
+
+  .radio-item {
+    margin-bottom: 5px;
+  }
   </style>
 
 </head>
@@ -161,49 +174,50 @@
         <div class="card card-primary card-outline">
           <div class="card-header">
             <h3 class="card-title">Loan Application Statistics</h3>
-          </div> <!-- /.card-body -->
-         
+          </div>   
           <div class="row">
             <div class="col-md-6 mb-4">
               <div class="card">
               <p>Total Number of Applications: {{ total_applications }}</p>
               <p>Total Approved Applications: {{ approved_applications }}</p>
               <p>Total Rejected Applications: {{ rejected_applications }}</p>
-              <p>Approval Rate: {{ approval_rate }}%</p>
-              <p>Rejection Rate: {{ rejection_rate }}%</p>
+              {{ plotDonut_html|safe }}
             </div>
             </div>
-
             <div class="col-md-6 mb-4">
-              <div class="card">
-                {{ plotDonut_html|safe }}
-              </div>
-            </div>
-
-          </div>
-
-         
-
-            <div id="loan-status-statistics"></div>
+              <div class="card"> 
             <h2>Loan Status Statistics</h2>
             <p>Select the feature </p>
-
-    <!-- Radio buttons for feature selection -->
-    <form>
-      {% for feature, statistics_html in feature_statistics.items %}
-        <input type="radio" name="feature" value="{{ feature }}" onclick="showTable('{{ feature }}')"> {{ feature }}
-      {% endfor %}
-    </form>
-
-    <!-- Tables for each feature -->
+            <form>
+              <div class="radio-container">
+                <div class="radio-column">
+                  {% for feature, statistics_html in feature_statistics.items %}
+                    {% if forloop.counter <= 4 %}
+                      <div class="radio-item">
+                        <input type="radio" name="feature" value="{{ feature }}" onclick="showTable('{{ feature }}')"> {{ feature }}
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <div class="radio-column">
+                  {% for feature, statistics_html in feature_statistics.items %}
+                    {% if forloop.counter > 4 %}
+                      <div class="radio-item">
+                        <input type="radio" name="feature" value="{{ feature }}" onclick="showTable('{{ feature }}')"> {{ feature }}
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </form>
     {% for feature, statistics_html in feature_statistics.items %}
       <div id="{{ feature }}Table" style="display:none;">
         {{ statistics_html|safe }}
       </div>
     {% endfor %}
-
-
-         
+            </div>
+            </div>
+          </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -250,13 +264,10 @@
 
 <script>
   function showTable(feature) {
-    // Hide all tables
     var tables = document.querySelectorAll('[id$="Table"]');
     tables.forEach(table => {
       table.style.display = 'none';
     });
-
-    // Show the selected table
     var selectedTable = document.getElementById(feature + 'Table');
     selectedTable.style.display = 'block';
   }
