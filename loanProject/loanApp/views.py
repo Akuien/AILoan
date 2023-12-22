@@ -122,7 +122,7 @@ def create_applicant(request):
             Income_USD = Income_SEK / manual_exchange_rate
             LoanAmount_USD = LoanAmount_SEK / manual_exchange_rate
            
-            model_path = 'newMLmodels/model_V1.joblib'
+            model_path = 'MLmodels/model_V3.joblib'
             model = load_model(model_path)
             prediction = model.predict([[Age, Income_USD, LoanAmount_USD, CreditScore, MonthsEmployed, LoanTerm, DTIRatio]])
             print("Prediction Result:", prediction[0])

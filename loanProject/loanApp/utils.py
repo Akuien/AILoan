@@ -7,12 +7,12 @@ from .models import *
 
 
 def get_available_models():
-    model_folder = 'newMLmodels'
+    model_folder = 'MLmodels'
     models = [file for file in os.listdir(model_folder) if file.endswith('.joblib')]
     return models
 
 def select_model(selected_model):
-    model_path = os.path.join('newMLmodels', selected_model)
+    model_path = os.path.join('MLmodels', selected_model)
     if not os.path.exists(model_path):
         raise FileNotFoundError("Selected model not found")
     
