@@ -48,6 +48,8 @@ class LoanForm(forms.Form):
     DTIRatio = forms.FloatField(label= "Debt To Income Ratio")
 
 
+
+
 class LoginForm(forms.Form):
     username = forms.CharField(
         widget= forms.TextInput(
@@ -88,10 +90,6 @@ class NewUserForm(UserCreationForm):
         fields='__all__'
         
        
-class ApplicantForm(ModelForm):
-    class Meta:
-        model=Applicant
-        fields='__all__'
 
 class UserForm(ModelForm):
     class Meta:
