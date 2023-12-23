@@ -103,9 +103,9 @@ def user_dashboard(request):
     else:
         return render(request, 'anonymousProfile.html')
 
+@login_required
 def create_applicant(request):
     context = {'messages': []}
-
     if request.method == 'POST':
         form = LoanForm(request.POST)
 
@@ -126,6 +126,21 @@ def create_applicant(request):
             model = load_model(model_path)
             prediction = model.predict([[Age, Income_USD, LoanAmount_USD, CreditScore, MonthsEmployed, LoanTerm, DTIRatio]])
             print("Prediction Result:", prediction[0])
+
+
+            # Save to NewLoanApplicant model with status 'pending' and logged-in user
+            new_loan_applicant = NewLoanApplicant.objects.create(
+                Age=Age,
+                Income=Income_USD,
+                LoanAmount=LoanAmount_USD,
+                CreditScore=CreditScore,
+                MonthsEmployed=MonthsEmployed,
+                LoanTerm=LoanTerm,
+                DTIRatio=DTIRatio,
+                Default=prediction[0],
+                status='pending',
+                user=request.user,
+            )
 
             input_data = np.array([[Age, Income_USD, LoanAmount_USD, CreditScore, MonthsEmployed, LoanTerm, DTIRatio]])
             explainer = shap.TreeExplainer(model)
@@ -361,20 +376,32 @@ def chat_assistance(request):
 
 ### Admin functions 
     
+@login_required
 def information(request):
-    return render(request, 'admin/information.html')
+    context = {'messages': []}
+    pending = NewLoanApplicant.objects.filter(status='pending')
+    context['pending_count'] = pending.count()
+    return render(request, 'admin/information.html', context)
     
 @login_required
 def applicants(request):
+    context = {'messages': []}
     if request.user.is_authenticated:
         applicants = LoanApplicant.objects.all()
+        pending = NewLoanApplicant.objects.filter(status='pending')
+        context['pending_count'] = pending.count()
+
         return render(request, 'admin/applicants.html', {
             "applicants": applicants,
+            "pending_count": context['pending_count'],
         })
+
     return redirect(login)
 
 def predictions(request):
     context = {'messages': []}
+    pending = NewLoanApplicant.objects.filter(status='pending')
+    context['pending_count'] = pending.count()
     if request.method == 'POST' and request.FILES.get('csv_file') and 'selected_model' in request.POST:
         try:
             csv_file = request.FILES['csv_file']
@@ -428,8 +455,11 @@ def predictions(request):
     context['available_models'] = get_available_models()
     return render(request, 'admin/predictions.html', context)
 
+
 def performance(request):
     try:
+        pending = NewLoanApplicant.objects.filter(status='pending')
+        pending_count = pending.count()
         available_models = get_available_models()
 
         if request.method == 'POST' and 'selected_model' in request.POST:
@@ -478,7 +508,8 @@ def performance(request):
             'selected_model': selected_model,
             'accuracy': accuracy,
             'confusion_matrix': cm,
-            'columns_after_missing_handling': test_data_df.columns.tolist()
+            'columns_after_missing_handling': test_data_df.columns.tolist(),
+            'pending_count': pending_count,
         }
 
         print("Context Data:", context)
@@ -490,7 +521,8 @@ def performance(request):
 
 
 def reports(request):
-
+    pending = NewLoanApplicant.objects.filter(status='pending')
+    pending_count = pending.count()
     total_applications = LoanApplicant.objects.count()
     approved_applications = LoanApplicant.objects.filter(Default=0).count()
     rejected_applications = LoanApplicant.objects.filter(Default=1).count()
@@ -531,6 +563,7 @@ def reports(request):
         'rejection_rate': rejection_rate_formatted,
         'plotDonut_html': plotDonut_html,
         'feature_statistics': feature_statistics,
+        'pending_count': pending_count,
     }
 
     return render(request, 'admin/reports.html', context)

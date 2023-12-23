@@ -3,6 +3,6 @@ from.models import *
 
 
 admin.site.register(CustomUser)
-admin.site.register([Applicant])
 admin.site.register(SavedModel)
 admin.site.register([LoanApplicant])
+admin.site.register(NewLoanApplicant)
