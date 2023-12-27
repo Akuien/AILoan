@@ -99,7 +99,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-2" style="background-color: #9616bd;">
     <!-- Brand Logo -->
-    <a href="/create-application" class="brand-link d-flex align-items-center">
+    <a href="/user-dashboard" class="brand-link d-flex align-items-center">
       <img src="{%static 'assets/dist/img/ailoan_logo_short.png' %}" alt="AIlOAN Logo" class="brand-image elevation-3" style="border-radius: 10px 10px; background-color: #FFFFFF;">
       <span class="brand-text font-weight-bold">User Dashboard</span>
     </a>
@@ -150,9 +150,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/aboutUs" class="nav-link" style=" color: #FFFFFF;">
+            <a href="/privacy-policy" class="nav-link" style=" color: #FFFFFF;">
               <i class="fas fa-file-alt nav-icon"></i>
-              <p>About Us</p>
+              <p>Privacy Policy</p>
             </a>
           </li>
           <li class="nav-item">
@@ -270,7 +270,7 @@
 
     messageInput.value = '';
 
-    fetch('chat-assistance', {
+    fetch('', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({

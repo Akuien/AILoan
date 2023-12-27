@@ -20,7 +20,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 import shap
 
-client = OpenAI(api_key='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')
+client = OpenAI(api_key='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')
 
 ## User methods
 
@@ -351,7 +351,7 @@ def profile(request):
 
 def ask_openai(message):
     try:
-        customPrompt = f"I am thinking of applying for a loan and {message}"
+        customPrompt = f'your role is a chat assistance in a loan approval identifier website called ailoan and the customer question to you is "{message}"'
         response = client.completions.create(
         model="gpt-3.5-turbo-instruct",
         prompt=customPrompt,
@@ -363,6 +363,7 @@ def ask_openai(message):
     except Exception as e:
         print(f"Error in ask_openai: {e}")
         return "Sorry, I couldn't understand that."
+
 
 def chat_assistance(request):
     if request.method == 'POST':
