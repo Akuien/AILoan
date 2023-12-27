@@ -43,7 +43,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             msg = 'user created'
-            return render(request, 'login.html', {'form': form})
+            return redirect('login')
         else:
             msg = 'form is not valid'
     else:
