@@ -366,7 +366,7 @@ def ask_openai(message):
         print(f"Error in ask_openai: {e}")
         return "Sorry, I couldn't understand that."
 
-
+@login_required
 def chat_assistance(request):
     if request.method == 'POST':
         message = request.POST.get('message')

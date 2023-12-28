@@ -28,7 +28,7 @@
 
     <style>
       body {
-        background-color: #e9ecef;
+        background-color: #d5e2f1;
       }
 
       .nav {
@@ -51,7 +51,6 @@
       .box {
         display: inline-block;
         width: 50%;
-        float: left;
         padding: 2em;
       }
 
@@ -63,19 +62,18 @@
         background-color: rgb(200, 200, 240);
         background-color: white;
         padding: 2em;
-        border-radiums: 1em;
+        border-radius: 1em;
         text-align: center;
-        width: 25%;
-        margin-left: 15em;
+        width: 35%;
+        margin-left: 2em;
+        margin-top: 2em;
       }
 
       .left {
         width: 55%;
       }
 
-      form {
-        margin-top: 2em;
-      }
+    
     </style>
   </head>
 
@@ -87,8 +85,8 @@
         </a>
 
         <ul class="nav navbar-nav navbar-right">
-          <li class="link"><a href="/login" class="nav-link">Login</a></li>
           <li class="link"><a href="/register" class="nav-link">Sign Up</a></li>
+          <li class="link"><a href="/aboutUs" class="nav-link">About Us</a></li>
         </ul>
       </div>
     </nav>
@@ -126,18 +124,20 @@
               </div>
             </div>
           </div>
+         
           <div class="row">
-            <div class="col-8">
-              <div class="forgot-password">
-                  <a href="{% url 'password_reset' %}" style="color: #090303;">Forgot Password?</a>
-              </div>
-            </div>
-            <!-- /.col -->
-            <div class="col-4">
+            <div class="col-md-6 offset-md-3">
               <button type="submit" class="btn btn-primary btn-block">Log In</button>
             </div>
-            <!-- /.col -->
           </div>
+          <div class="row">
+            <div class="col-md-6 offset-md-3">
+              <div class="forgot-password text-center">
+                <a href="{% url 'password_reset' %}" style="color: #2a49e3;">Forgot Password?</a>
+              </div>
+            </div>
+          </div>
+         
         </form>
       </div>
     </div>
