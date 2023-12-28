@@ -84,7 +84,7 @@ def welcome(request):
             msg = 'Error validating form'
 
     return render(request, "home.html", {
-        "form": form,
+        "form": form, "msg": msg
     })
 
 def user_dashboard(request):
@@ -313,6 +313,7 @@ def update(request):
 def login_view(request):
     form = LoginForm(request.POST or None)
     msg = None
+
     if request.method == 'POST':
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -335,7 +336,8 @@ def login_view(request):
                 msg = 'Invalid credentials'
         else:
             msg = 'Error validating form'
-    return render(request, 'login.html', {'form': form, 'msg': msg})
+
+    return render(request, 'login.html', {'form': form,'msg': msg})
 
 @login_required
 def profile(request):

@@ -48,6 +48,11 @@
             </div>
           </div>
         </div>
+        <span class="mb-0 custom-error-style {% if msg and 'Invalid credentials' in msg %}custom-error-text{% endif %}">
+          {% if msg %}
+              {{ msg | safe }}
+          {% endif %}
+      </span>
         <div class="row">
           <div class="col-8">
             <div class="forgot-password">
@@ -87,3 +92,11 @@
 <script src="{%static '../../dist/js/adminlte.min.js' %}"></script>
 </body>
 </html>
+
+<style>
+  .custom-error-text {
+    color: red;
+    /* Other styles for the red text */
+  }
+  </style>
+

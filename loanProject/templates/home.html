@@ -103,11 +103,11 @@
       <div class="box form">
         <h1>Already have an account?</h1>
         <h3>Sign right in!</h3>
-        <span class="mb-0 text-muted">
+        <span class="mb-0 custom-error-style {% if msg and 'Invalid credentials' in msg %}custom-error-text{% endif %}">
           {% if msg %}
               {{ msg | safe }}
           {% endif %}
-        </span>
+      </span>      
         <form method="post">
           {% csrf_token %}
           <div class="input-group mb-3">
@@ -143,3 +143,9 @@
     </div>
   </body>
 </html>
+<style>
+.custom-error-text {
+  color: red;
+  /* Other styles for the red text */
+}
+</style>

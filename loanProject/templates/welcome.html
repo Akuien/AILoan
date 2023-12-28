@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{% loan messages %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -40,6 +41,11 @@
                            a loan. With AI, we help you reduce the risks, processing time and provide reliable feedback.
                     </label>
                   </div>
+                  <span class="mb-0 text-muted {% if msg and 'Invalid credentials' in msg %}text-danger{% endif %}">
+                    {% if msg %}
+                        {{ msg | safe }}
+                    {% endif %}
+                </span>                
                   <label>Log in if you already have registered!</label>
                   <div class="form-group last mb-4">
                       <div><button class="btn btn-pill text-white btn-block btn-primary"><a href="{% url 'login' %}">login</a></button></div>
@@ -65,6 +71,9 @@
 .horizontal-align h1 {
     display: inline-block;
     vertical-align: middle; /* vertically alignment */
+}
+.custom-error-text {
+    color: red;
 }
 
 </style>
