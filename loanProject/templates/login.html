@@ -53,23 +53,23 @@
               {{ msg | safe }}
           {% endif %}
       </span>
-        <div class="row">
-          <div class="col-8">
-            <div class="forgot-password">
-                <a href="{% url 'password_reset' %}" style="color: #090303;">Forgot Password?</a>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
+      <div class="row">
+        <div class="col-md-6">
             <button type="submit" class="btn btn-primary btn-block">Log In</button>
           </div>
-          <!-- /.col -->
         </div>
-      </form>
-      <p class="mb-0">
-        <a href="register.html" class="text-center">Register a new membership</a>
-      </p>
-    </div>
+        <div class="col-md-6">
+        <div class="forgot-password">
+          <a href="{% url 'password_reset' %}" style="color: #090303;">Forgot Password?</a>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <p class="text-center"><b>Don't have an account?</b> <a href="/register">Sign up</a> here!</p>
+      </div>
+      </div>
+    </form>
+    
+  </div>
     <!-- /.login-card-body -->
   </div>
 </div>

@@ -28,7 +28,7 @@
 
     <style>
       body {
-        background-color: #e9ecef;
+        background-color: #d5e2f1;
       }
 
       .nav {
@@ -51,7 +51,6 @@
       .box {
         display: inline-block;
         width: 50%;
-        float: left;
         padding: 2em;
       }
 
@@ -63,19 +62,51 @@
         background-color: rgb(200, 200, 240);
         background-color: white;
         padding: 2em;
-        border-radiums: 1em;
+        border-radius: 1em;
         text-align: center;
-        width: 25%;
-        margin-left: 15em;
+        width: 35%;
+        margin-left: 2em;
+        margin-top: 2em;
       }
 
       .left {
         width: 55%;
       }
+      .grid-content {
+      width: 30%;
+      margin-left: 100px;
+      height: 70%;
+      padding: 2px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 20px;
+    }
 
-      form {
-        margin-top: 2em;
-      }
+    .grid-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .grid-item img {
+      width: 100%;
+    }
+
+    .grid-item p {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .description p {
+      font-weight: bold;
+      font-size: 24px;
+      color: #113e98;
+      font-family: sans-serif;
+      font-style: italic;
+      text-align: center
+    }
+
+    
     </style>
   </head>
 
@@ -87,8 +118,8 @@
         </a>
 
         <ul class="nav navbar-nav navbar-right">
-          <li class="link"><a href="/login" class="nav-link">Login</a></li>
           <li class="link"><a href="/register" class="nav-link">Sign Up</a></li>
+          <li class="link"><a href="/aboutUs" class="nav-link">About Us</a></li>
         </ul>
       </div>
     </nav>
@@ -96,8 +127,30 @@
     <div class="home">
       <div class="box left">
         <h1>Welcome to AiLoan</h1>
+        
         <p>We help you simplify your loan application and eligibility process. Using AILoan, as a bank customer, you can quickly discover if you are eligible for a loan with your bank. As a bank admin, you can quickly check if your applicants are eligible for a loan. With AI, we help you reduce the risks, processing time and provide reliable feedback.</p>
-        <p><b>Are you interested?</b> <a href="/register">Sign up</a> right now!</p>
+        <p><b>Are you interested?</b> <a href="/register" style="color: #801380;">Sign up</a> right now!</p>
+        <div class="description">
+          <p>We offer a wide range of loan options</p>
+        </div>
+        <div class="grid-content">
+          <div class="grid-item">
+            <img src="{%static 'images/loan.png' %}" style="width: 70%;">
+            <p>Personal Loan</p>
+          </div>
+          <div class="grid-item">
+            <img src="{%static 'images/home-loan.png' %}" style="width: 100%;">
+            <p>Home Loan</p>
+          </div>
+          <div class="grid-item">
+            <img src="{%static 'images/car-loan.png' %}" style="width: 120%;">
+            <p>Car Loan</p>
+          </div>
+          <div class="grid-item">
+            <img src="{%static 'images/vacation.png' %}" style="width: 100%;">
+            <p>Travel Loan</p>
+          </div>
+        </div>
       </div>
 
       <div class="box form">
@@ -126,18 +179,20 @@
               </div>
             </div>
           </div>
+         
           <div class="row">
-            <div class="col-8">
-              <div class="forgot-password">
-                  <a href="{% url 'password_reset' %}" style="color: #090303;">Forgot Password?</a>
-              </div>
-            </div>
-            <!-- /.col -->
-            <div class="col-4">
+            <div class="col-md-6 offset-md-3">
               <button type="submit" class="btn btn-primary btn-block">Log In</button>
             </div>
-            <!-- /.col -->
           </div>
+          <div class="row">
+            <div class="col-md-6 offset-md-3">
+              <div class="forgot-password text-center">
+                <a href="{% url 'password_reset' %}" style="color: #2a49e3;">Forgot Password?</a>
+              </div>
+            </div>
+          </div>
+         
         </form>
       </div>
     </div>
