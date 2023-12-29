@@ -47,6 +47,21 @@
     margin-left: 10px;
     border-radius: 3px;
   }
+  .text-success {
+  color: green;
+}
+
+.text-danger {
+  color: red;
+}
+.bg-success {
+  background-color: rgb(115, 219, 115);
+}
+
+.bg-danger {
+  background-color: rgb(230, 102, 102);
+}
+
 
   </style> 
 </head>
@@ -354,10 +369,13 @@
 </form>
 
 {% if application_result %}
-  <h2>{{ application_result }}</h2>
+  <h2 class="{% if application_result == 'Congratulations, you qualify for a loan!' %}text-success{% else %}text-danger{% endif %}">
+    {{ application_result }}
+  </h2>
 {% endif %}
+
 {% if shap_values %}
-<div class="card mt-4">
+<div class="card mt-4 {% if application_result == 'Congratulations, you qualify for a loan!' %}bg-success{% else %}bg-danger{% endif %}">
   <div class="card-header">
     <h4 class="card-title">
       Insights into your loan application!
