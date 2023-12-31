@@ -62,7 +62,16 @@
   background-color: rgb(230, 102, 102);
 }
 
+.main-footer {
+      background-color: #7a7676;
+      color: #ffffff;
+}
 
+.form-group .btn.smaller-submit-button {
+    width: auto;
+    font-size: 15px !important;
+    padding: 5px 10px !important;
+  }
   </style> 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -110,18 +119,6 @@
                       <p>Profile</p>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="/reset-password" class="nav-link">
-                      <i class="fas fa-key nav-icon"></i>
-                      <p>Reset Password</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="/loan-history" class="nav-link">
-                      <i class="fas fa-history nav-icon"></i>
-                      <p>Loan history</p>
-                    </a>
-                  </li>
                 </ul>
               </li>
           <li class="nav-item">
@@ -151,7 +148,6 @@
 
         </ul>
       </nav>
-      
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
@@ -364,9 +360,8 @@
   </div>
 
   <div class="form-group">
-    <input class="btn btn-primary" type="submit" value="Submit">
+    <input class="btn btn-primary smaller-submit-button" type="submit" value="Submit">
   </div>
-</form>
 
 {% if application_result %}
   <h2 class="{% if application_result == 'Congratulations, you qualify for a loan!' %}text-success{% else %}text-danger{% endif %}">
@@ -425,6 +420,7 @@
   </div>
   </div>
 </div>
+
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
