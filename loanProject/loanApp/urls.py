@@ -28,7 +28,8 @@ urlpatterns = [
     path('accounts/password-reset/done/', CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('register/', register, name='register'),
     path('logout_user',logout_user, name='logout'),
-    path('deleteImage', delete_image, name='delete_image')
+    path('deleteImage', delete_image, name='delete_image'),
+    path('update_status/', update_status, name='update_status'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

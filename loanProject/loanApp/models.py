@@ -10,12 +10,6 @@ class CustomUser(AbstractUser):
     image = models.FileField(upload_to='', null=True, blank=True)
 
 
-class SavedModel(models.Model):
-    name = models.CharField(max_length=50)
-    file_path = models.CharField(max_length=255)
-    
-    
-
 class UserDetail(models.Model):
     userID = models.AutoField(primary_key=True)
     firstName = models.CharField(max_length=30)

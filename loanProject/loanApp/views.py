@@ -353,7 +353,7 @@ def profile(request):
 
 def ask_openai(message):
     try:
-        customPrompt = f'your role is a chat assistance in a loan approval identifier website called ailoan and the customer question to you is "{message}"'
+        customPrompt = f'your role is a chatbot assistance in a website that help with loan approval questions called AILoan and the customer question to you is "{message}"'
         response = client.completions.create(
         model="gpt-3.5-turbo-instruct",
         prompt=customPrompt,
@@ -390,7 +390,7 @@ def information(request):
 def applicants(request):
     context = {'messages': []}
     if request.user.is_authenticated:
-        applicants = LoanApplicant.objects.all()
+        applicants = NewLoanApplicant.objects.all()
         pending = NewLoanApplicant.objects.filter(status='pending')
         context['pending_count'] = pending.count()
 
@@ -400,6 +400,22 @@ def applicants(request):
         })
 
     return redirect(login)
+
+
+def update_status(request):
+    if request.method == 'POST':
+        loan_id = request.POST.get('loan_id')
+        new_status = request.POST.get('new_status')
+
+        try:
+            applicant = NewLoanApplicant.objects.get(LoanID=loan_id)
+            applicant.status = new_status
+            applicant.save()
+            messages.success(request, f'Status updated successfully for Loan ID {loan_id}.')
+        except NewLoanApplicant.DoesNotExist:
+            messages.error(request, f'Loan ID {loan_id} not found.')
+
+    return redirect('applicants')
 
 def predictions(request):
     context = {'messages': []}

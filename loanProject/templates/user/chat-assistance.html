@@ -54,7 +54,14 @@
       height: 100%;
       display: flex;
       flex-direction: column;
+      
     }
+
+    .main-footer {
+      background-color: #7a7676;
+      color: #ffffff;
+    }
+
   </style>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
   <!-- Google Font: Source Sans Pro -->
@@ -106,7 +113,7 @@
     <!-- Sidebar -->
     <div class="sidebar" style="background-color: #9616bd;">
       <!-- Sidebar Menu -->
-      <nav class="mt-2">
+     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -121,18 +128,6 @@
                     <a href="/view-profile" class="nav-link">
                       <i class="fas fa-cogs nav-icon"></i>
                       <p>Profile</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="/reset-password" class="nav-link">
-                      <i class="fas fa-key nav-icon"></i>
-                      <p>Reset Password</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="/loan-history" class="nav-link">
-                      <i class="fas fa-history nav-icon"></i>
-                      <p>Loan history</p>
                     </a>
                   </li>
                 </ul>
@@ -150,9 +145,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/privacy-policy" class="nav-link" style=" color: #FFFFFF;">
+            <a href="/aboutUs" class="nav-link" style=" color: #FFFFFF;">
               <i class="fas fa-file-alt nav-icon"></i>
-              <p>Privacy Policy</p>
+              <p>About Us</p>
             </a>
           </li>
           <li class="nav-item">
@@ -164,7 +159,6 @@
 
         </ul>
       </nav>
-      
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
@@ -188,7 +182,7 @@
         <div>
           <div class="chat-container">
             <div class="card flex-grow-1">
-              <div class="card-header bg-primary text-white">Chat</div>
+              <div class="card-header bg-primary text-white">AILoan Chatbot</div>
               <div class="card-body messages-box">
                 
                 <ul class="list-unstyled messages-list">
@@ -232,6 +226,8 @@
   </div>
   </div>
 </div>
+
+
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
