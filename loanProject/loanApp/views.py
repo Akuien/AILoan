@@ -151,6 +151,14 @@ def create_applicant(request):
                 flat_shap_values = flat_shap_values = [item for sublist in shap_values for item in sublist]
                 context['shap_values'] = flat_shap_values
 
+                context['Age'] = Age
+                context['Income_USD'] = Income_USD
+                context['LoanAmount_USD'] = LoanAmount_USD
+                context['CreditScore'] = CreditScore
+                context['MonthsEmployed'] = MonthsEmployed
+                context['LoanTerm'] = LoanTerm
+                context['DTIRatio'] = DTIRatio
+
             save_to_database(
                 [{
                     'Age': Age,

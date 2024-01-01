@@ -378,13 +378,27 @@
   </div>
   <div class="card-body">
     <ul>
-      <li><strong>Your Age:</strong> {{ shap_values.0.0|floatformat:5 }}</li>
-      <li><strong>Income:</strong> {{ shap_values.0.1|floatformat:5 }}</li>
-      <li><strong>Loan Amount:</strong> {{ shap_values.0.2|floatformat:5 }}</li>
-      <li><strong>Credit Score:</strong> {{ shap_values.0.3|floatformat:5 }}</li>
-      <li><strong>Months Employed:</strong> {{ shap_values.0.4|floatformat:5 }}</li>
-      <li><strong>Loan Term:</strong> {{ shap_values.0.5|floatformat:5 }}</li>
-      <li><strong>Debt-to-Income Ratio (DTI):</strong> {{ shap_values.0.6|floatformat:5 }}</li>
+      <li><strong>Your Age:</strong> {{ Age }}</li>
+      <li><strong>Income:</strong> {{ Income_USD }}</li>
+      <li><strong>Loan Amount:</strong> {{ LoanAmount_USD }}</li>
+      <li><strong>Credit Score:</strong> {{ CreditScore }}</li>
+      <li><strong>Months Employed:</strong> {{ MonthsEmployed }}</li>
+      <li><strong>Loan Term:</strong> {{ LoanTerm }}</li>
+      <li><strong>Debt-to-Income Ratio (DTI):</strong> {{ DTIRatio }}</li>
+    </ul>
+    
+    <p>
+      <strong>Impact on Your Loan Application:</strong>
+    </p>
+    
+    <ul>
+      <li>Your Age: {% if shap_values.0.0 > 0 %}Positive{% else %}Negative{% endif %} impact</li>
+      <li>Income: {% if shap_values.0.1 > 0 %}Positive{% else %}Negative{% endif %} impact</li>
+      <li>Loan Amount: {% if shap_values.0.2 > 0 %}Positive{% else %}Negative{% endif %} impact</li>
+      <li>Credit Score: {% if shap_values.0.3 > 0 %}Positive{% else %}Negative{% endif %} impact</li>
+      <li>Months Employed: {% if shap_values.0.4 > 0 %}Positive{% else %}Negative{% endif %} impact</li>
+      <li>Loan Term: {% if shap_values.0.5 > 0 %}Positive{% else %}Negative{% endif %} impact</li>
+      <li>Debt-to-Income Ratio (DTI): {% if shap_values.0.6 > 0 %}Positive{% else %}Negative{% endif %} impact</li>
     </ul>
     <p>
       These insights help you understand how each factor influenced the decision on your loan application.
