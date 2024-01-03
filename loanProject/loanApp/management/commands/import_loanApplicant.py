@@ -30,23 +30,23 @@ class Command(BaseCommand):
 
     def create_loan_applicant(self, row):
         loan_applicant, created = LoanApplicant.objects.get_or_create(
-            LoanID=row['LoanID'],
-            defaults={
-                'Age': row['Age'],
-                'Income': row['Income'],
-                'LoanAmount': row['LoanAmount'],
-                'CreditScore': row['CreditScore'],
-                'MonthsEmployed': row['MonthsEmployed'],
-                'LoanTerm': row['LoanTerm'],
-                'DTIRatio': row['DTIRatio'],
-                'EmploymentType': row['EmploymentType'],
-                'Default': row['Default']
-            }
-        )
+        LoanID=row['LoanID'],
+        defaults={
+            'Age': row['Age'],
+            'Income': row['Income'],
+            'LoanAmount': row['LoanAmount'],
+            'CreditScore': row['CreditScore'],
+            'MonthsEmployed': row['MonthsEmployed'],
+            'LoanTerm': row['LoanTerm'],
+            'DTIRatio': row['DTIRatio'],
+            'Default': row['Default']
+        }
+    )
         if created:
             self.stdout.write(self.style.SUCCESS(f'Created {loan_applicant}'))
         else:
             self.stdout.write(self.style.WARNING(f'Loan Applicant {loan_applicant} already exists'))
+
 
     def finalize(self):
         self.stdout.write(self.style.SUCCESS('Import completed successfully'))
