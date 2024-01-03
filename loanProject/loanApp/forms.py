@@ -38,6 +38,8 @@ class SignUpForm(UserCreationForm):
         model = CustomUser
         fields = ('username', 'email', 'password1', 'password2', 'is_admin', 'is_customer')
 
+
+
 class LoanForm(forms.Form):
     Age = forms.IntegerField()
     Income = forms.FloatField()
