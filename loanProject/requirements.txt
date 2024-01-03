@@ -9,3 +9,7 @@ pandas==1.5.1
 seaborn==0.12.1
 tensorflow==2.8.0
 keras==2.8.0
+shortuuid
+requests
+openai
+shap

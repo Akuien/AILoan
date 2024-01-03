@@ -32,7 +32,7 @@ spec:
           
           name: ai-loan-app
           # define the image to pull
-          image: registry.git.chalmers.se/courses/dit826/2023/group6/group6:latest
+          image: registry.git.chalmers.se/courses/dit826/2023/group6/ailoan:latest
           # Always pull the image from the registry when the
           # manifest is applied.
           imagePullPolicy: Always
