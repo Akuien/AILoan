@@ -56,20 +56,24 @@ def logout_user(request):
     return redirect('welcome')
 
 def welcome(request):
+    # Create a login form instance with submitted data  
+    # Contributer : Nazli, Kanokawan, Akuien
     form = LoginForm(request.POST or None)
     msg = None
 
     if request.method == 'POST':
+        # Check if the form is valid
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-
+        # Check if authentication was successful
             if user is not None:
+                 # Check if the user account is active
                 if user.is_active:
                     login(request, user)
                     messages.success(request, 'Login successful')
-
+        # Redirect users based on their roles
                     if user.is_admin:
                         return redirect('predictions')
                     elif user.is_customer:
@@ -83,6 +87,7 @@ def welcome(request):
         else:
             msg = 'Error validating form'
 
+    # Render the home template with the login form and message
     return render(request, "home.html", {
         "form": form, "msg": msg
     })
@@ -318,7 +323,7 @@ def update(request):
     else:
         return render(request, "anonymousProfile.html", {"found": False, "msg": f"User id {id} not found"})
     
-def login_view(request):
+def login_view(request): #contributer: Nazli, Kanokwan, Akuien
     form = LoginForm(request.POST or None)
     msg = None
 
@@ -327,11 +332,13 @@ def login_view(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-
+        # Check if authentication was successful
             if user is not None:
+                # Check if the user account is active
                 if user.is_active:
                     login(request, user)
                     messages.success(request, 'Login successful')
+                    # Redirect users based on their roles
                     if user.is_admin:
                         return redirect('predictions')
                     elif user.is_customer:
@@ -344,7 +351,7 @@ def login_view(request):
                 msg = 'Invalid credentials'
         else:
             msg = 'Error validating form'
-
+# Render the home template with the login form and message
     return render(request, 'login.html', {'form': form,'msg': msg})
 
 @login_required
@@ -482,11 +489,13 @@ def predictions(request):
     context['available_models'] = get_available_models()
     return render(request, 'admin/predictions.html', context)
 
-
+# contributor: Cynthia , Nazli
+# The performance view provides an overview of the model's accuracy and confusion matrix on test data.
 def performance(request):
     try:
         pending = NewLoanApplicant.objects.filter(status='pending')
         pending_count = pending.count()
+        #get the list of available models
         available_models = get_available_models()
 
         if request.method == 'POST' and 'selected_model' in request.POST:
@@ -495,7 +504,7 @@ def performance(request):
             selected_model = available_models[0] if available_models else None
 
         model = select_model(selected_model)
-
+        # Retrieve features used in training the model   
         features_used_in_training = [field.name for field in LoanApplicant._meta.fields if field.name != 'id']
         test_data = LoanApplicant.objects.all().values(*features_used_in_training)
         test_data_df = pd.DataFrame.from_records(test_data, columns=features_used_in_training)
@@ -511,11 +520,11 @@ def performance(request):
 
         if 'Default' not in test_data_df.columns:
             return render(request, 'performance.html', {'error': "'Default' not found in the dataset"})
-        
+        # Prepare input for prediction
         prediction_input = test_data_df.drop(['Default', 'LoanID'], axis=1)
         print("Prediction Input:")
         print(prediction_input)
-
+         # Make predictions using the selected model
         test_prediction = model.predict(prediction_input)
         Y_test = list(test_data_df['Default'])
         Y_test = np.nan_to_num(Y_test, nan=-1)
@@ -529,7 +538,7 @@ def performance(request):
         print("Columns in test_data_df after handling missing columns:", test_data_df.columns)
         print("Accuracy:", accuracy)
         print("Confusion Matrix:", cm)
-
+        # Prepare context for rendering the template
         context = {
             'available_models': available_models,
             'selected_model': selected_model,
@@ -595,10 +604,16 @@ def reports(request):
 
     return render(request, 'admin/reports.html', context)
 
-class CustomPasswordResetView(AllauthPasswordResetView):
+
+#contributer: Nazli
+# CustomPasswordResetView is a subclass of AllauthPasswordResetView
+# It provides a custom template for the password reset page.
+class CustomPasswordResetView(AllauthPasswordResetView): 
     template_name = 'custom_password_reset.html'  
     success_url = reverse_lazy('password_reset_done')  
-  
+
+# CustomPasswordResetDoneView is a simple TemplateView subclass
+# It provides a custom template for the password reset done page.
 class CustomPasswordResetDoneView(TemplateView):
     template_name = 'custom_password_reset_done.html'  
 
