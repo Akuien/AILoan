@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: loan-app-svc
+  name: loan-app-svc
+spec:
+  ports:
+  - name: 80-80
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: ai-loan-pod
+    app: loan-app-svc
+  type: NodePort
+status:
+  loadBalancer: {}
+
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+  creationTimestamp: "2024-01-04T05:00:50Z"
+  generateName: ai-loan-pod-
+  labels:
+    run: ai-loan-pod
+  name: ai-loan-pod-5q65s
+  namespace: default
+spec:
+  allocateLoadBalancerNodePorts: true
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 31544
+    port: 80
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    run: ai-loan-pod
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 34.90.250.219
+
