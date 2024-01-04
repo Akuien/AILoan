@@ -23,16 +23,17 @@ import unittest
 from unittest.mock import Mock, patch
 from unittest.mock import patch, MagicMock
 
+# contributor: Nazli and Akuien
 
 
-
-
+# Test case for the HomeView, checking the behavior of the 'home' view.
 class HomeViewTest(TestCase):
     def test_home_view(self):
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
 
+# Test case for the ReportsView, setting up sample LoanApplicant instances.
 class ReportsViewTest(TestCase):
     def setUp(self):
         LoanApplicant.objects.create(
@@ -57,6 +58,7 @@ class ReportsViewTest(TestCase):
             Default=None
         )
 
+# Test case for the ReportsView, checking the rendered HTML content and elements.
     def test_reports_view(self):
         response = self.client.get(reverse('reports'))
         self.assertEqual(response.status_code, 200)
@@ -65,7 +67,7 @@ class ReportsViewTest(TestCase):
         for key_string in key_strings:
             with self.subTest(key_string=key_string):
                 self.assertContains(response, key_string)
-
+#Define features and iterate through features 
         features = ['Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio']
         for feature in features:
             with self.subTest(feature=feature):
@@ -74,7 +76,7 @@ class ReportsViewTest(TestCase):
         for feature in features:
             with self.subTest(feature=feature):
                 self.assertContains(response, f'id="{feature}Table" style="display:none;"')
-
+# Check if Plotly new plot script is present in the response
         self.assertContains(response, 'Plotly.newPlot')
 
 
@@ -96,7 +98,7 @@ class RegisterViewTest(TestCase):
         
         print(response.content.decode('utf-8'))
 
-        
+        # Check if the user with the specified username exists in the database
         user_exists = CustomUser.objects.filter(username='testuser').exists()
         print(f"User exists in the database: {user_exists}")
 
@@ -142,11 +144,12 @@ class LoginViewTest(TestCase):
         #self.assertRedirects(response, reverse('create_applicant'))
         
 
-
+# Test for invalid login credentials
     def test_login_view_invalid_credentials(self):
         if not get_user_model().objects.filter(username='testuser').exists():
             get_user_model().objects.create_user(username='testuser', password='testpassword')
 
+# Define invalid login data (wrong password)
         invalid_login_data = {
             'username': 'testuser',
             'password': 'wrongpassword',
@@ -156,7 +159,7 @@ class LoginViewTest(TestCase):
         self.assertFalse(response.context['user'].is_authenticated)
 
 
-        
+       # Test for an inactive user 
     def test_login_view_inactive_user(self):
         self.user.is_active = False
         self.user.save()
@@ -171,18 +174,20 @@ class LoginViewTest(TestCase):
         self.assertFalse(response.context['user'].is_authenticated)
 
 
+# Test for form validation error (missing login data)
     def test_login_view_form_validation_error(self):
         response = self.client.post(reverse('login'), data={}, follow=True)
 
         self.assertFalse(response.context['user'].is_authenticated)
 
 
-
+# Create a user in the database and force login for the test
     def test_logout_user(self):
      user, created = CustomUser.objects.get_or_create(
         username='testuser',
         defaults={'password': make_password('testpassword')}
     )
+    # Force login the user for the test
      self.client.force_login(user)
 
      response = self.client.get(reverse('logout'))
@@ -196,9 +201,11 @@ class LoginViewTest(TestCase):
         messages = [m.message for m in messages]
         self.assertIn("You are logged out.", messages)
 
+# Test case for deleting a user's profile image.
 
 class DeleteImageViewTest(TestCase):
     def setUp(self):
+         # Create a user with a profile image and save it
         self.user = get_user_model().objects.create_user(
             username='testuser',
             password='testpassword'
@@ -207,6 +214,7 @@ class DeleteImageViewTest(TestCase):
         self.user.image = SimpleUploadedFile('test_image.jpg', b'content', content_type='image/jpeg')
         self.user.save()
 
+# Test the functionality of deleting a user's profile image
     def test_delete_image(self):
         self.client.force_login(self.user)
 
@@ -243,8 +251,11 @@ class DeleteImageViewTest(TestCase):
      #   self.assertJSONEqual(response.content, {'message': message, 'response': 'Mocked response'})
      #   mock_ask_openai.assert_called_once_with(message)
 
+
+# Test case for the 'ask_openai' function
     def test_ask_openai_function(self):
 
+#Define the test message and call the function
         message = "I have a question."
 
         response = ask_openai(message)
@@ -254,12 +265,14 @@ class DeleteImageViewTest(TestCase):
 
 
 
+# Test case for asking OpenAI with success response
 class TestAskOpenAI(unittest.TestCase):
 
+# Mocking the OpenAI API call for a successful response
     @patch("loanApp.views.client.completions.create")
     def test_ask_openai_success(self, mock_create):
         mock_create.return_value.choices[0].text.strip.return_value = "Mocked response"
-
+#Define a test message and ask the fucntion
         message = "Can I get information about loan approval?"
         result = ask_openai(message)
 
@@ -273,6 +286,8 @@ class TestAskOpenAI(unittest.TestCase):
         self.assertEqual(result, "Mocked response")
 
     @patch("loanApp.views.client.completions.create")
+        # Test case for asking OpenAI with an exception
+
     def test_ask_openai_exception(self, mock_create):
         mock_create.side_effect = Exception("Mocked error")
 
@@ -290,16 +305,17 @@ class TestAskOpenAI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
+# Test case for the 'performance_view' in the application
 class PerformanceViewTest(TestCase):
 
+# Mocking the functions to get available models and select a model
     @patch("loanApp.views.get_available_models")
     @patch("loanApp.views.select_model")
     def test_performance_view(self, mock_select_model, mock_get_available_models):
         
         mock_select_model.return_value = MagicMock()  
         mock_get_available_models.return_value = ['Model1', 'Model2']
-
+ # Create a test client
         client = Client()
 
         response = client.get(reverse('performance'))
