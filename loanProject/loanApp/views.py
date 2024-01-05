@@ -33,6 +33,7 @@ def loan_history(request):
 def reset_password(request):
     return render(request, 'user/reset-password.html')
 
+#Contributor: Cynthia
 def aboutUs(request):
     return render(request, 'user/aboutUs.html')
 
@@ -112,12 +113,15 @@ def user_dashboard(request):
     else:
         return render(request, 'anonymousProfile.html')
 
+
+#Contribution: Cynthia
 @login_required
 def create_applicant(request):
     context = {'messages': []}
+    # Check if the request method is POST
     if request.method == 'POST':
         form = LoanForm(request.POST)
-
+    # Check if the form is valid and extract cleaned data from the form
         if form.is_valid():
             Age = form.cleaned_data['Age']
             Income_SEK = form.cleaned_data['Income']
@@ -127,10 +131,12 @@ def create_applicant(request):
             LoanTerm = form.cleaned_data['LoanTerm']
             DTIRatio = form.cleaned_data['DTIRatio']
             
+            # Manual exchange rate for converting SEK to USD
             manual_exchange_rate = 10
             Income_USD = Income_SEK / manual_exchange_rate
             LoanAmount_USD = LoanAmount_SEK / manual_exchange_rate
            
+            # Load the machine learning model and make predictions
             model_path = 'MLmodels/model_V3.joblib'
             model = load_model(model_path)
             prediction = model.predict([[Age, Income_USD, LoanAmount_USD, CreditScore, MonthsEmployed, LoanTerm, DTIRatio]])
@@ -150,7 +156,7 @@ def create_applicant(request):
                 status='pending',
                 user=request.user,
             )
-
+            # Explainable AI
             input_data = np.array([[Age, Income_USD, LoanAmount_USD, CreditScore, MonthsEmployed, LoanTerm, DTIRatio]])
             explainer = shap.TreeExplainer(model)
             shap_values = explainer.shap_values(input_data)
@@ -168,6 +174,7 @@ def create_applicant(request):
                 context['LoanTerm'] = LoanTerm
                 context['DTIRatio'] = DTIRatio
 
+            # Save input data and prediction to the database
             save_to_database(
                 [{
                     'Age': Age,
@@ -180,7 +187,7 @@ def create_applicant(request):
                 }],
                 [prediction[0]],
             )
-
+            #context for displaying prediction results
             context['prediction_data'] = {
                 'headers': ['Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio'],
                 'records': [({
@@ -196,6 +203,7 @@ def create_applicant(request):
             context['application_result'] = "Congratulations, you qualify for a loan!" if prediction[0] == 0 else "Sorry, your application has been rejected."
     else:
         form = LoanForm()
+        # Set placeholders for form fields
         form.fields['Age'].widget.attrs['placeholder'] = 'Enter your age'
         form.fields['Income'].widget.attrs['placeholder'] = 'Enter your annual salary in SEK'
         form.fields['LoanAmount'].widget.attrs['placeholder'] = 'Enter your desired loan amount in SEK'
@@ -205,6 +213,7 @@ def create_applicant(request):
         form.fields['DTIRatio'].widget.attrs['placeholder'] = 'Enter your debt to income ratio'
     context['form'] = form
     return render(request, 'user/create-applicant.html', context)
+
 
 @login_required
 def view_profile(request):
@@ -400,7 +409,8 @@ def chat_assistance(request):
 
 
 ### Admin functions 
-    
+
+#Contributor: Cynthia
 @login_required
 def information(request):
     context = {'messages': []}
@@ -443,23 +453,31 @@ def update_status(request):
 
     return redirect('applicants')
 
+#Contribution: Cynthia
+#perfom predictions on an uploaded CSV file and the resluts
+#can be viewd in a table or as a pie chart
 def predictions(request):
     context = {'messages': []}
+    # Query pending loan applicants
     pending = NewLoanApplicant.objects.filter(status='pending')
     context['pending_count'] = pending.count()
+    # Check if the request method is POST, a CSV file is uploaded, and a selected model is provided
     if request.method == 'POST' and request.FILES.get('csv_file') and 'selected_model' in request.POST:
         try:
+            # Retrieve the uploaded CSV file and selected model from the request
             csv_file = request.FILES['csv_file']
             selected_model = request.POST['selected_model']
             model = select_model(selected_model)
             csv_data = read_csv_file(csv_file)
 
+            # Define the expected columns in the CSV file
             expected_columns = ['Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio']
             actual_columns = list(csv_data.columns)
 
             if not all(column in actual_columns for column in expected_columns):
                 raise ValueError('Incorrect columns in the CSV file')
             
+            # Check if the CSV file is empty
             if csv_data.empty:
                 raise ValueError('The CSV file is empty')
             csv_data, records_list = apply_label_encoders(csv_data)
@@ -467,8 +485,10 @@ def predictions(request):
                 'headers': list(records_list[0].keys()),
                 'records': records_list,
             }
+            # Make predictions using the loaded model
             predictions_data = make_predictions(model, csv_data, records_list)
 
+            # Count predictions labeled as 0 (Approved) and 1 (Rejected)
             count_0 = 0
             count_1 = 0
             for record, prediction in zip(records_list, [prediction for _, prediction in predictions_data]):
@@ -480,6 +500,8 @@ def predictions(request):
 
             print("Count of 0:", count_0)
             print("Count of 1:", count_1)
+
+            # Create a pie chart using Plotly
             labels = ['0 (Approved)', '1 (Rejected)']
             values = [count_0, count_1]
             colors = ['lightgreen', 'lightcoral']
@@ -567,13 +589,18 @@ def performance(request):
         return render(request, 'admin/performance.html', {'error': f"Prediction error: {str(e)}"})
 
 
+# contributor: Cynthia
+#See statistical reports of all applicants
 def reports(request):
+    # Query pending loan applicants
     pending = NewLoanApplicant.objects.filter(status='pending')
     pending_count = pending.count()
+    # Count total, approved, and rejected loan applications
     total_applications = LoanApplicant.objects.count()
     approved_applications = LoanApplicant.objects.filter(Default=0).count()
     rejected_applications = LoanApplicant.objects.filter(Default=1).count()
 
+    # Calculate approval and rejection rates
     approval_rate = (approved_applications / total_applications) * 100 if total_applications > 0 else 0
     rejection_rate = (rejected_applications / total_applications) * 100 if total_applications > 0 else 0
 
@@ -581,7 +608,7 @@ def reports(request):
     rejection_rate_formatted = "{:.2f}".format(rejection_rate)
     
     data = LoanApplicant.objects.values('Default', 'Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio')
-    
+    # Create a pie chart using Plotly
     labels = ['Approved', 'Rejected']
     values = [approval_rate_formatted, rejection_rate_formatted]
     fig = px.pie(values=values, names=labels, hole=0.3, title='Approval and Rejection Rates')
@@ -591,6 +618,7 @@ def reports(request):
     df['Income'] /= 10
     df['LoanAmount'] /= 10
 
+    # Calculate statistics for each feature based on loan approval status
     feature_statistics = {}
     features = ['Age', 'Income', 'LoanAmount', 'CreditScore', 'MonthsEmployed', 'LoanTerm', 'DTIRatio']
 
@@ -627,3 +655,4 @@ class CustomPasswordResetView(AllauthPasswordResetView):
 # It provides a custom template for the password reset done page.
 class CustomPasswordResetDoneView(TemplateView):
     template_name = 'custom_password_reset_done.html'  
+ 
