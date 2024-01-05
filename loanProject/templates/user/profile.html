@@ -44,12 +44,19 @@
       margin-bottom: 2em;
     }
  
-
+    .delete {
+      margin: auto;
+      margin-right: 10em;
+      margin-bottom: 1em;
+      width: 50%;
+      float: left;
+    }
 
     .image img.pfp {
-  border-radius: 50%;
-  border: 3px solid rgb(185, 115, 185); 
-}
+      border-radius: 50%;
+      border: 3px solid rgb(185, 115, 185); 
+    }
+
     input[type="file"] {
       display: none;
     }
@@ -181,9 +188,14 @@
                   {{form.image}}
                   <a href="/deleteImage" class="btn btn-warning">Delete Image</a>
                 </div>
-                <div class="delete">
-                  <a href="/delete" class="btn btn-danger">Deactivate Account</a>
+                <div class="delete" id="delete">
+                  <h3>Delete account</h3>
+                  <p>By deleting your account, you will be losing your account data. Once you delete your account, this information can not be recovered.</p>
+                  <a href="/delete" class="btn btn-danger">Delete</a>
+                  <button type="button" class="btn btn-light" id="hideDelete">Cancel</button>
                 </div>
+
+                <button type="button" class="btn btn-danger" id="showDelete">Deactivate Account</button>
               </div>
               <div class="side">
                 <div class="input-group">
@@ -239,6 +251,20 @@
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button)
+</script>
+
+<script>
+$(document).ready(function() {
+  $("#delete").hide();
+
+  $("#showDelete").click(function() {
+    $("#delete").slideDown(500);
+
+    $("#hideDelete").click(function() {
+      $("#delete").slideUp(500)
+    })
+  })
+})
 </script>
 <!-- Bootstrap 4 -->
 <script src="{%static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
