@@ -5,12 +5,16 @@ import joblib
 from django.http import HttpResponse
 from .models import *
 
+#Contribution: Cynthia
 
+#Return the list of available models versions by
+#searching for files ending with '.joblib' in the model folder
 def get_available_models():
     model_folder = 'MLmodels'
     models = [file for file in os.listdir(model_folder) if file.endswith('.joblib')]
     return models
 
+#select and load a machine learning model.
 def select_model(selected_model):
     model_path = os.path.join('MLmodels', selected_model)
     if not os.path.exists(model_path):
@@ -18,6 +22,7 @@ def select_model(selected_model):
     
     return load_model(model_path)
 
+# Read the content of the CSV file and decode it using UTF-8
 def read_csv_file(csv_file):
     try:
         csv_content = csv_file.read().decode("utf-8")
