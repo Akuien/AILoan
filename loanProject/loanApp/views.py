@@ -242,13 +242,25 @@ def view_profile(request):
                 return redirect(view_profile)
 
         else:
+            fname = " "
+            lname = " "
+
+            print(user.first_name == "")
+
+            if user.first_name != "":
+                fname = user.first_name,
+            
+            if user.last_name != "":
+                fname = user.last_name,
+
             form = UpdateUserForm(initial={
-                "fname": user.first_name,
-                "lname": user.last_name,
+                "fname": fname,
+                "lname": lname,
                 "uname": user.username,
                 "email": user.email,
                 "image": user.image,
             })
+
         return render(request, "user/profile.html", {
             "id": id, 
             "user": user.username,
