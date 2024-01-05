@@ -36,6 +36,9 @@ def reset_password(request):
 def aboutUs(request):
     return render(request, 'user/aboutUs.html')
 
+
+# contributor: Kanokwan
+# Creating a new user in the system, with different role
 def register(request):
     msg = None
     if request.method == 'POST':
@@ -91,6 +94,7 @@ def welcome(request):
     return render(request, "home.html", {
         "form": form, "msg": msg
     })
+
 
 def user_dashboard(request):
     if request.user.is_authenticated:
@@ -322,7 +326,9 @@ def update(request):
         })
     else:
         return render(request, "anonymousProfile.html", {"found": False, "msg": f"User id {id} not found"})
-    
+
+
+
 def login_view(request): #contributer: Nazli, Kanokwan, Akuien
     form = LoginForm(request.POST or None)
     msg = None
@@ -365,7 +371,8 @@ def profile(request):
         # User is not authenticated (anonymous), handle it accordingly
         return render(request, 'anonymousProfile.html')
 
-
+# contributor: Kanokwan
+# Handle chat assistance role in the system, using openAI api
 def ask_openai(message):
     try:
         customPrompt = f'your role is a chatbot assistance in a website that help with loan approval questions called AILoan and the customer question to you is "{message}"'
@@ -380,7 +387,7 @@ def ask_openai(message):
     except Exception as e:
         print(f"Error in ask_openai: {e}")
         return "Sorry, I couldn't understand that."
-
+    
 @login_required
 def chat_assistance(request):
     if request.method == 'POST':
@@ -400,7 +407,10 @@ def information(request):
     pending = NewLoanApplicant.objects.filter(status='pending')
     context['pending_count'] = pending.count()
     return render(request, 'admin/information.html', context)
-    
+
+
+# contributor: kanokwan
+# display all the newly made application to the admin dashboard  
 @login_required
 def applicants(request):
     context = {'messages': []}
@@ -416,7 +426,8 @@ def applicants(request):
 
     return redirect(login)
 
-
+# contributor: Kanokwan
+# update the reviewing status of the each individual application, working together with the notification
 def update_status(request):
     if request.method == 'POST':
         loan_id = request.POST.get('loan_id')
@@ -616,76 +627,3 @@ class CustomPasswordResetView(AllauthPasswordResetView):
 # It provides a custom template for the password reset done page.
 class CustomPasswordResetDoneView(TemplateView):
     template_name = 'custom_password_reset_done.html'  
-
-
-
-""" def get_model_metadata(request):
-    try:
-        # Load the model
-        model = joblib.load('loan_model.joblib')
-
-        # Get the features used during training from the Django model
-        features_used_in_training = [field.name for field in Applicant._meta.fields if field.name != 'id']
-
-        # Get the test data from the Django model
-        test_data = Applicant.objects.all().values(*features_used_in_training)
-
-        # Create a DataFrame from the queryset
-        test_data_df = pd.DataFrame.from_records(test_data, columns=features_used_in_training)
-
-        # Ensure all columns are present (you may need to handle missing columns)
-        missing_columns = set(features_used_in_training) - set(test_data_df.columns)
-
-        # Drop missing columns
-        test_data_df = test_data_df.drop(columns=missing_columns, errors='ignore')
-
-        # Rename columns in the test_data_df to match the case in the training data
-        test_data_df = test_data_df.rename(columns={'age': 'Age', 'car_ownership': 'Car_Ownership', 'current_house_years': 'Current_House_Years',
-                                                    'current_job_years': 'Current_Job_Years', 'experience': 'Experience', 'house_ownership': 'House_Ownership',
-                                                    'income': 'Income', 'marital_status': 'Marital_Status', 'profession': 'Profession'})
-
-        # Apply label encoding for each categorical variable
-        marital_status_encoder = LabelEncoder()
-        house_ownership_encoder = LabelEncoder()
-        car_ownership_encoder = LabelEncoder()
-        profession_encoder = LabelEncoder()
-
-        test_data_df['Marital_Status'] = marital_status_encoder.fit_transform(test_data_df['Marital_Status'])
-        test_data_df['House_Ownership'] = house_ownership_encoder.fit_transform(test_data_df['House_Ownership'])
-        test_data_df['Car_Ownership'] = car_ownership_encoder.fit_transform(test_data_df['Car_Ownership'])
-        test_data_df['Profession'] = profession_encoder.fit_transform(test_data_df['Profession'])
-
-        # Make predictions
-        if 'risk_flag' not in test_data_df.columns:
-            raise ValueError("'risk_flag' not found in the dataset")
-
-        # Prepare prediction input
-        prediction_input = test_data_df.drop(['risk_flag', 'city', 'state','loan_id'], axis=1)
-
-        # Fetch 'Risk_Flag' values from the database
-        Y_test = list(test_data_df['risk_flag'])
-
-        # Handle NaN values in Y_test
-        Y_test = np.nan_to_num(Y_test, nan=-1)  # Replace NaN with -1 or any other suitable value
-
-        # Calculate accuracy
-        accuracy = accuracy_score(Y_test, model.predict(prediction_input))
-
-        # Calculate confusion matrix
-        cm = confusion_matrix(Y_test, model.predict(prediction_input))
-
-        # Return metadata as JSON
-        metadata = {
-            'accuracy': accuracy,
-            'confusion_matrix': cm.tolist(),
-            'success': True  # Flag indicating successful calculation
-        }
-
-        return JsonResponse(metadata)
-
-    except Exception as e:
-        # Return error message if an exception occurs
-        error_message = f"Error during metadata calculation: {str(e)}"
-        metadata = {'success': False, 'error': error_message}
-        return JsonResponse(metadata)
- """
