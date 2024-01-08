@@ -9,6 +9,56 @@ Our solution to this problem is to improve the process by using artificial intel
 
 ### Setup Instructions
 
+#### Step 1: clone the project
+Via SSH run 
+
+`git clone git@git.chalmers.se:courses/dit826/2023/group6/ailoan.git`
+
+Via HTTPS run 
+
+`git clone https://git.chalmers.se/courses/dit826/2023/group6/ailoan.git`
+
+#### Step 2: Install django and libraries
+Navigate to `cd ailoan/loanProject/`
+
+Run the requirements file `pip install -r requirements.txt`
+
+#### Step 3: Run the project
+Run the project `python manage.py runserver`
+
+### Containerise and push the project using docker
+Inside the same directory, run the Dockerfile
+
+`docker login registry.git.chalmers.se`
+
+`docker build -t registry.git.chalmers.se/courses/dit826/2023/group6/ailoan .`
+
+`docker run -p 8000:8000 registry.git.chalmers.se/courses/dit826/2023/group6/ailoan` 
+
+`docker push registry.git.chalmers.se/courses/dit826/2023/group6/ailoan`
+
+### Run and deploy on Kubernetes
+Prerequisites
+1. Kubernetes
+2. Minikube
+3. Docker
+
+Start Minikube
+
+`minikube start`
+
+Create a pod
+
+`kubectl apply -f pod.yaml`
+
+Create a service
+
+`kubectl apply -f loanappsvc.yaml`
+
+Deploy
+
+`kubectl apply -f loan.yaml`
+
 ### Tools and Techology
 * Djangos
 * Pandas
