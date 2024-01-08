@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: ai-loan-pod
+  name: ai-loan-pod
+spec:
+  containers:
+  - image: registry.git.chalmers.se/courses/dit826/2023/group6/ailoan:latest
+    name: ai-loan-pod
+  restartPolicy: Always
+  imagePullSecrets:
+     - name: app-secret
